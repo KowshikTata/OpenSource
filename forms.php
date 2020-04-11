@@ -12,24 +12,24 @@ if($conn->conn_error)
 echo $conn->error;
 }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-echo "invalid email adress!!";
+$msg= "invalid email adress!!";
 }
 else if($password!=$cpassword)
 {
-echo "password and confirm password must be same";
+$msg="password and confirm password must be same";
 }
 
 else if (strlen($_POST["password"]) <= '8') {
-echo "Password Must Contain At Least 8 Characters!";
+$msg="Password Must Contain At Least 8 Characters!";
 }
 else if(!preg_match("#[0-9]+#",$password)) {
-echo "Password Must Contain At Least 1 Number!";
+$msg="Password Must Contain At Least 1 Number!";
 }
 else if(!preg_match("#[A-Z]+#",$password)) {
-echo "Password Must Contain At Least 1 Capital Letter!";
+$msg="Password Must Contain At Least 1 Capital Letter!";
 }
 else if(!preg_match("#[a-z]+#",$password)) {
-echo "Password Must Contain At Least 1 Lowercase Letter!";
+$msg="Password Must Contain At Least 1 Lowercase Letter!";
 } 
 else
 {
@@ -40,18 +40,18 @@ $sql2="select * from signup where username= '$username'";
 $result2=$conn->query($sql2);
 if($result->num_rows>0) 
 {
-echo "Email Already Exists!!";
+$msg="Email Already Exists!!";
 }
 else if($result2->num_rows>0)
 {
-echo "UserName Already Exists!!";
+$msg="UserName Already Exists!!";
 }
 else
 {
 $st=$conn->prepare("INSERT INTO signup(username,email,password) values(?,?,?)");
 $st->bind_param("sss",$username,$email,$password);
 $st->execute();
-echo "Registered Successfully!!";
+$msg="Registered Successfully!!";
 }
 }
 
@@ -207,7 +207,7 @@ input[type=submit] {
 
 <h2>Sign Up</h2>
 <p>Please fill in this form to create an account</p>
-
+<?php if(msg!=null) echo $msg; ?>
 
   <div class="input-container">
     <i class="fa fa-user icon"></i>
